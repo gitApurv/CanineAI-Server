@@ -32,6 +32,7 @@ public class DiseaseDataSeeder implements CommandLineRunner {
                 "Canine Parvovirus",
                 new DiseaseTags[] { DiseaseTags.VIRAL },
                 "Highly contagious viral disease in puppies and unvaccinated dogs.",
+                "https://img.freepik.com/premium-photo/studio-portrait-brown-white-black-medium-mixed-breed-dog-smiling-against-green-background_772412-3654.jpg",
                 "Parvovirus primarily attacks the intestinal tract and can cause severe dehydration.",
                 List.of(
                         new InfoItem("Vomiting", "Frequent vomiting leading to fluid loss."),
@@ -49,6 +50,7 @@ public class DiseaseDataSeeder implements CommandLineRunner {
                 "Mange",
                 new DiseaseTags[] { DiseaseTags.PARASITIC },
                 "Skin disease caused by mites, resulting in itching and hair loss.",
+                "https://img.freepik.com/premium-photo/studio-portrait-brown-white-black-medium-mixed-breed-dog-smiling-against-green-background_772412-3654.jpg",
                 "Different mite species cause sarcoptic or demodectic mange; severity varies by immunity.",
                 List.of(
                         new InfoItem("Intense itching", "Persistent scratching and skin irritation."),
@@ -66,6 +68,7 @@ public class DiseaseDataSeeder implements CommandLineRunner {
                 "Kennel Cough",
                 new DiseaseTags[] { DiseaseTags.VIRAL, DiseaseTags.BACTERIAL },
                 "Respiratory infection common in social dog environments.",
+                "https://img.freepik.com/premium-photo/studio-portrait-brown-white-black-medium-mixed-breed-dog-smiling-against-green-background_772412-3654.jpg",
                 "Often caused by a mix of pathogens such as Bordetella and canine parainfluenza.",
                 List.of(
                         new InfoItem("Dry cough", "Persistent honking cough, especially after activity."),

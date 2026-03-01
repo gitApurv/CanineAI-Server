@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apurv.canineAi.constants.ApiUrls;
+import com.apurv.canineAi.dto.ApiResponse;
 import com.apurv.canineAi.dto.DiseaseDto;
 import com.apurv.canineAi.dto.DiseaseSummaryDto;
 import com.apurv.canineAi.services.DiseaseService;
@@ -24,18 +25,18 @@ public class DiseaseController {
     }
 
     @GetMapping(ApiUrls.DISEASES)
-    public ResponseEntity<List<DiseaseSummaryDto>> getDiseases() {
+    public ResponseEntity<ApiResponse<List<DiseaseSummaryDto>>> getDiseases() {
         List<DiseaseSummaryDto> diseases = diseaseService.getAllDiseases();
-        return ResponseEntity.ok(diseases);
+        return ResponseEntity.ok(ApiResponse.success(diseases));
     }
 
     @GetMapping(ApiUrls.DISEASES + "/{id}")
-    public ResponseEntity<DiseaseDto> getDiseaseById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<DiseaseDto>> getDiseaseById(@PathVariable String id) {
         DiseaseDto disease = diseaseService.getDiseaseById(id);
         if (disease != null) {
-            return ResponseEntity.ok(disease);
+            return ResponseEntity.ok(ApiResponse.success(disease));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(ApiResponse.error("Disease not found"));
         }
     }
 

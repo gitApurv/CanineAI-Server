@@ -23,6 +23,7 @@ public class DiseaseEntity {
     private String name;
     private DiseaseTags[] tags;
     private String shortDescription;
+    private String diseaseImageUrl;
     private String overview;
     private List<InfoItem> symptoms;
     private List<InfoItem> causes;

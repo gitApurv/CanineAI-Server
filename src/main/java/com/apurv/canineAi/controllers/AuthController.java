@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.apurv.canineAi.constants.ApiUrls;
+import com.apurv.canineAi.dto.ApiResponse;
 import com.apurv.canineAi.dto.UserLoginRequestDto;
 import com.apurv.canineAi.dto.UserRegisterRequestDto;
 import com.apurv.canineAi.dto.UserResponseDto;
@@ -29,45 +30,45 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.REGISTER_USER)
-    public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             UserResponseDto registeredUser = authService.registerUser(userRegisterRequestDto);
             String token = JwtTokenUtil.sign(registeredUser.getId());
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(registeredUser);
+                    .body(ApiResponse.success(registeredUser));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
         }
     }
 
     @PostMapping(ApiUrls.LOGIN)
-    public ResponseEntity<?> loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
             UserResponseDto loggedInUser = authService.loginUser(userLoginRequestDto);
             String token = JwtTokenUtil.sign(loggedInUser.getId());
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(loggedInUser);
+                    .body(ApiResponse.success(loggedInUser));
         } catch (IllegalArgumentException ex) {
             if ("Email not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
             }
             if ("Invalid password".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid password"));
             }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
         }
     }
 
     @GetMapping(ApiUrls.LOGOUT)
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<ApiResponse<String>> logout() {
         ResponseCookie authCookie = AuthCookieUtil.clearAuthCookie();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                .body("Logged out successfully");
+                .body(ApiResponse.success("Logged out successfully"));
     }
 
 }

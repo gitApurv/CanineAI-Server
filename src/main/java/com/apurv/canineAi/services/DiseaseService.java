@@ -39,6 +39,7 @@ public class DiseaseService {
                 diseaseEntity.getName(),
                 diseaseEntity.getTags(),
                 diseaseEntity.getShortDescription(),
+                diseaseEntity.getDiseaseImageUrl(),
                 diseaseEntity.getOverview(),
                 diseaseEntity.getSymptoms(),
                 diseaseEntity.getCauses(),
@@ -47,7 +48,9 @@ public class DiseaseService {
 
     private DiseaseSummaryDto toSummaryDto(DiseaseEntity diseaseEntity) {
         return new DiseaseSummaryDto(
+                diseaseEntity.getId(),
                 diseaseEntity.getName(),
-                diseaseEntity.getShortDescription());
+                diseaseEntity.getShortDescription(),
+                diseaseEntity.getTags());
     }
 }
