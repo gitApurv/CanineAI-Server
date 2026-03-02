@@ -21,7 +21,7 @@ public class DiseaseDto {
     private String shortDescription;
     private String diseaseImageUrl;
     private String overview;
-    private List<InfoItem> symptoms;
+    private List<SymptomDto> symptoms;
     private List<InfoItem> causes;
     private List<InfoItem> preventionTips;
 }

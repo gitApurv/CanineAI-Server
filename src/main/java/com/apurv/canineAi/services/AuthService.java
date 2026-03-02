@@ -46,10 +46,11 @@ public class AuthService {
 
         UserEntity newUser = new UserEntity(
                  null,
-                userRegisterRequestDto.getFullName(),
+                userRegisterRequestDto.getName(),
                 userRegisterRequestDto.getEmail(),
             PasswordHasherUtil.hash(userRegisterRequestDto.getPassword()),
-                userRegisterRequestDto.getProfilePictureUrl());
+                userRegisterRequestDto.getProfilePictureUrl(),
+                Instant.now());
 
         UserEntity savedUser = userRepository.save(newUser);
 

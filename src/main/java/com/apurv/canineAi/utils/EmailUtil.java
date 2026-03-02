@@ -31,7 +31,7 @@ public class EmailUtil {
 
     public void sendWelcomeEmail(UserEntity userEntity) {
         String subject = "Welcome to CanineAI";
-        String body = "Hi " + userEntity.getFullName() + ",\n\n"
+        String body = "Hi " + userEntity.getName() + ",\n\n"
                 + "Welcome to CanineAI. Your account has been created successfully.\n\n"
                 + "We are happy to have you on board.\n\n"
                 + "- CanineAI Team";
@@ -41,7 +41,7 @@ public class EmailUtil {
 
     public void sendPasswordResetEmail(UserEntity userEntity, String token) {
         String subject = "Reset your CanineAI password";
-        String body = "Hi " + userEntity.getFullName() + ",\n\n"
+        String body = "Hi " + userEntity.getName() + ",\n\n"
                 + "We received a request to reset your password.\n"
                 + "Click the link below to continue:\n\n"
                 + clientUrl + "/reset-password?token=" + token + "&email=" + userEntity.getEmail() + "\n\n"

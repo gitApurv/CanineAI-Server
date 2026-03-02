@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,7 +26,7 @@ public class DiseaseEntity {
     private String shortDescription;
     private String diseaseImageUrl;
     private String overview;
-    private List<InfoItem> symptoms;
+    private List<String> symptoms;
     private List<InfoItem> causes;
     private List<InfoItem> preventionTips;
 }

@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequestDto {
+public class SymptomDto {
     private String name;
-    private String email;
-    private String password;
-    private String profilePictureUrl;
+    private String description;
 }

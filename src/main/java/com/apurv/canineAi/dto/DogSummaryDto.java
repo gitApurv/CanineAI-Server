@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequestDto {
+public class DogSummaryDto {
     private String name;
-    private String email;
-    private String password;
-    private String profilePictureUrl;
+    private String breed;
+    private String profileImageUrl;
 }
