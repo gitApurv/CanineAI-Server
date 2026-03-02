@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.apurv.canineAi.constants.ApiUrls;
 import com.apurv.canineAi.dto.ApiResponse;
+import com.apurv.canineAi.dto.ForgotPasswordRequestDto;
+import com.apurv.canineAi.dto.ResetPasswordRequestDto;
 import com.apurv.canineAi.dto.UserLoginRequestDto;
 import com.apurv.canineAi.dto.UserRegisterRequestDto;
 import com.apurv.canineAi.dto.UserResponseDto;
@@ -60,6 +62,41 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid password"));
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
+        }
+    }
+
+    @PostMapping(ApiUrls.FORGOT_PASSWORD)
+    public ResponseEntity<ApiResponse<String>> forgotPassword(@RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
+        try {
+            authService.forgotPassword(forgotPasswordRequestDto.getEmail());
+            return ResponseEntity.ok(ApiResponse.success("Password reset email sent successfully"));
+        } catch (IllegalArgumentException ex) {
+            if ("Email not found".equals(ex.getMessage())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
+            }
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        }
+    }
+
+    @PostMapping(ApiUrls.RESET_PASSWORD)
+    public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+        try {
+            authService.resetPassword(
+                    resetPasswordRequestDto.getToken(),
+                    resetPasswordRequestDto.getEmail(),
+                    resetPasswordRequestDto.getPassword());
+            return ResponseEntity.ok(ApiResponse.success("Password reset successfully"));
+        } catch (IllegalArgumentException ex) {
+            if ("Invalid token".equals(ex.getMessage())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid token"));
+            }
+            if ("Token expired".equals(ex.getMessage())) {
+                return ResponseEntity.status(HttpStatus.GONE).body(ApiResponse.error("Token expired"));
+            }
+            if ("Email not found".equals(ex.getMessage())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
+            }
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         }
     }
 
