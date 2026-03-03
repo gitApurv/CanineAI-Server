@@ -42,6 +42,9 @@ public class AuthController {
                     .body(ApiResponse.success(registeredUser));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -62,6 +65,9 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid password"));
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -75,6 +81,9 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -97,15 +106,23 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
     @GetMapping(ApiUrls.LOGOUT)
     public ResponseEntity<ApiResponse<String>> logout() {
-        ResponseCookie authCookie = AuthCookieUtil.clearAuthCookie();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                .body(ApiResponse.success("Logged out successfully"));
+        try {
+            ResponseCookie authCookie = AuthCookieUtil.clearAuthCookie();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, authCookie.toString())
+                    .body(ApiResponse.success("Logged out successfully"));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
+        }
     }
 
 }

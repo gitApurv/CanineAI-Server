@@ -37,9 +37,15 @@ public class DogController {
             return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
         }
 
-        String userId = userIdAttr.toString();
-        dogService.addDog(dogRequest, userId);
-        return ResponseEntity.ok(ApiResponse.success("Dog added successfully"));
+        try {
+            String userId = userIdAttr.toString();
+            dogService.addDog(dogRequest, userId);
+            return ResponseEntity.ok(ApiResponse.success("Dog added successfully"));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+        }
     }
 
     @GetMapping(ApiUrls.DOGS)
@@ -49,9 +55,15 @@ public class DogController {
             return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
         }
 
-        String userId = userIdAttr.toString();
-        List<DogSummaryDto> dogs = dogService.getDogsByOwnerId(userId);
-        return ResponseEntity.ok(ApiResponse.success(dogs));
+        try {
+            String userId = userIdAttr.toString();
+            List<DogSummaryDto> dogs = dogService.getDogsByOwnerId(userId);
+            return ResponseEntity.ok(ApiResponse.success(dogs));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+        }
     }
 
     @GetMapping(ApiUrls.DOGS + "/{dogId}")
@@ -74,6 +86,8 @@ public class DogController {
                 return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -97,6 +111,8 @@ public class DogController {
                 return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -119,6 +135,8 @@ public class DogController {
                 return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
         }
     }
 }

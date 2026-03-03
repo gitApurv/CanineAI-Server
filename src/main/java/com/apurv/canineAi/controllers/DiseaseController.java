@@ -26,17 +26,29 @@ public class DiseaseController {
 
     @GetMapping(ApiUrls.DISEASES)
     public ResponseEntity<ApiResponse<List<DiseaseSummaryDto>>> getDiseases() {
-        List<DiseaseSummaryDto> diseases = diseaseService.getAllDiseases();
-        return ResponseEntity.ok(ApiResponse.success(diseases));
+        try {
+            List<DiseaseSummaryDto> diseases = diseaseService.getAllDiseases();
+            return ResponseEntity.ok(ApiResponse.success(diseases));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+        }
     }
 
     @GetMapping(ApiUrls.DISEASES + "/{id}")
     public ResponseEntity<ApiResponse<DiseaseDto>> getDiseaseById(@PathVariable String id) {
-        DiseaseDto disease = diseaseService.getDiseaseById(id);
-        if (disease != null) {
-            return ResponseEntity.ok(ApiResponse.success(disease));
-        } else {
-            return ResponseEntity.status(404).body(ApiResponse.error("Disease not found"));
+        try {
+            DiseaseDto disease = diseaseService.getDiseaseById(id);
+            if (disease != null) {
+                return ResponseEntity.ok(ApiResponse.success(disease));
+            } else {
+                return ResponseEntity.status(404).body(ApiResponse.error("Disease not found"));
+            }
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
         }
     }
 
