@@ -16,9 +16,9 @@ import com.apurv.canineAi.models.enums.Gender;
 @AllArgsConstructor
 @Document(collection = "dogs")
 public class DogEntity {
-	@Id
-	private String id;
-	private String ownerId;
+    @Id
+    private String id;
+    private String ownerId;
     private String name;
     private String breed;
     private Long ageYears;

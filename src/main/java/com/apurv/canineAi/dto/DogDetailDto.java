@@ -11,8 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DogDetailDto {
-    private String id;
-    private String ownerId;
     private String name;
     private String breed;
     private Long ageYears;

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ import com.apurv.canineAi.constants.ApiUrls;
 
 @RestController
 public class DogController {
-    
+
     private final DogService dogService;
 
     public DogController(DogService dogService) {
@@ -29,7 +30,8 @@ public class DogController {
     }
 
     @PostMapping(ApiUrls.DOGS)
-    public ResponseEntity<ApiResponse<String>> addDog(@RequestBody DogRequestDto dogRequest, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<String>> addDog(@RequestBody DogRequestDto dogRequest,
+            HttpServletRequest request) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
             return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
@@ -53,7 +55,8 @@ public class DogController {
     }
 
     @GetMapping(ApiUrls.DOGS + "/{dogId}")
-    public ResponseEntity<ApiResponse<DogDetailDto>> getDogById(HttpServletRequest request, @PathVariable String dogId) {
+    public ResponseEntity<ApiResponse<DogDetailDto>> getDogById(HttpServletRequest request,
+            @PathVariable String dogId) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
             return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
@@ -75,7 +78,8 @@ public class DogController {
     }
 
     @PutMapping(ApiUrls.DOGS + "/{dogId}")
-    public ResponseEntity<ApiResponse<String>> updateDog(HttpServletRequest request, @PathVariable String dogId, @RequestBody DogRequestDto dogRequest) {
+    public ResponseEntity<ApiResponse<String>> updateDog(HttpServletRequest request, @PathVariable String dogId,
+            @RequestBody DogRequestDto dogRequest) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
             return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
@@ -85,6 +89,28 @@ public class DogController {
         try {
             dogService.updateDog(dogId, dogRequest, userId);
             return ResponseEntity.ok(ApiResponse.success("Dog updated successfully"));
+        } catch (IllegalArgumentException ex) {
+            if ("Dog not found".equals(ex.getMessage())) {
+                return ResponseEntity.status(404).body(ApiResponse.error("Dog not found"));
+            }
+            if ("Unauthorized access to dog".equals(ex.getMessage())) {
+                return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
+            }
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        }
+    }
+
+    @DeleteMapping(ApiUrls.DOGS + "/{dogId}")
+    public ResponseEntity<ApiResponse<String>> deleteDog(HttpServletRequest request, @PathVariable String dogId) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+        }
+
+        String userId = userIdAttr.toString();
+        try {
+            dogService.deleteDog(dogId, userId);
+            return ResponseEntity.ok(ApiResponse.success("Dog deleted successfully"));
         } catch (IllegalArgumentException ex) {
             if ("Dog not found".equals(ex.getMessage())) {
                 return ResponseEntity.status(404).body(ApiResponse.error("Dog not found"));

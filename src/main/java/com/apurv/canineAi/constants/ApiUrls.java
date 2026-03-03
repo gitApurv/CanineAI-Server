@@ -7,7 +7,7 @@ public final class ApiUrls {
     public static final String FORGOT_PASSWORD = "/api/auth/forgot-password";
     public static final String RESET_PASSWORD = "/api/auth/reset-password";
     public static final String LOGOUT = "/api/auth/logout";
-    public static final String DOGS = "/api/dogs";
-    public static final String USER = "/api/user"; 
+    public static final String DOGS = "/api/dog";
+    public static final String USER = "/api/user";
 
 }

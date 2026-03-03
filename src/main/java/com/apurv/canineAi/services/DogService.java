@@ -13,7 +13,7 @@ import com.apurv.canineAi.repositories.DogRepository;
 
 @Service
 public class DogService {
-    
+
     private final DogRepository dogRepository;
 
     public DogService(DogRepository dogRepository) {
@@ -37,6 +37,7 @@ public class DogService {
         return dogRepository.findByOwnerId(ownerId)
                 .stream()
                 .map(dog -> new DogSummaryDto(
+                        dog.getId(),
                         dog.getName(),
                         dog.getBreed(),
                         dog.getProfileImageUrl()))
@@ -52,8 +53,6 @@ public class DogService {
         }
 
         return new DogDetailDto(
-                dog.getId(),
-                dog.getOwnerId(),
                 dog.getName(),
                 dog.getBreed(),
                 dog.getAgeYears(),
@@ -80,5 +79,16 @@ public class DogService {
         dog.setProfileImageUrl(dogRequest.getProfileImageUrl());
 
         dogRepository.save(dog);
+    }
+
+    public void deleteDog(String dogId, String userId) {
+        DogEntity dog = dogRepository.findById(dogId)
+                .orElseThrow(() -> new IllegalArgumentException("Dog not found"));
+
+        if (!userId.equals(dog.getOwnerId())) {
+            throw new IllegalArgumentException("Unauthorized access to dog");
+        }
+
+        dogRepository.delete(dog);
     }
 }

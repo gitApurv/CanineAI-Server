@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DogSummaryDto {
+    private String id;
     private String name;
     private String breed;
     private String profileImageUrl;
