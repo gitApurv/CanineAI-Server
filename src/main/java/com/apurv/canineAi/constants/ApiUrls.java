@@ -2,6 +2,7 @@ package com.apurv.canineAi.constants;
 
 public final class ApiUrls {
     public static final String DISEASES = "/api/diseases";
+    public static final String SYMPTOMS = "/api/symptoms";
     public static final String REGISTER_USER = "/api/auth/register";
     public static final String LOGIN = "/api/auth/login";
     public static final String FORGOT_PASSWORD = "/api/auth/forgot-password";
@@ -9,5 +10,6 @@ public final class ApiUrls {
     public static final String LOGOUT = "/api/auth/logout";
     public static final String DOGS = "/api/dog";
     public static final String USER = "/api/user";
+    public static final String PREDICT = "/api/predict";
 
 }

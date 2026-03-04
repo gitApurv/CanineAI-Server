@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SymptomDto {
+    private String id;
     private String name;
     private String description;
 }
