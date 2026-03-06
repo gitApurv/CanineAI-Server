@@ -23,16 +23,17 @@ import com.apurv.canineAi.utils.JwtTokenUtil;
 
 @RestController
 public class AuthController {
-    
+
     private final AuthService authService;
-    
+
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping(ApiUrls.REGISTER_USER)
-    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(
+            @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             UserResponseDto registeredUser = authService.registerUser(userRegisterRequestDto);
             String token = JwtTokenUtil.sign(registeredUser.getId());
@@ -49,7 +50,8 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.LOGIN)
-    public ResponseEntity<ApiResponse<UserResponseDto>> loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> loginUser(
+            @RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
             UserResponseDto loggedInUser = authService.loginUser(userLoginRequestDto);
             String token = JwtTokenUtil.sign(loggedInUser.getId());
@@ -72,7 +74,8 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.FORGOT_PASSWORD)
-    public ResponseEntity<ApiResponse<String>> forgotPassword(@RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
+    public ResponseEntity<ApiResponse<String>> forgotPassword(
+            @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
         try {
             authService.forgotPassword(forgotPasswordRequestDto.getEmail());
             return ResponseEntity.ok(ApiResponse.success("Password reset email sent successfully"));
@@ -88,7 +91,8 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.RESET_PASSWORD)
-    public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+    public ResponseEntity<ApiResponse<String>> resetPassword(
+            @RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
         try {
             authService.resetPassword(
                     resetPasswordRequestDto.getToken(),

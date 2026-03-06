@@ -19,10 +19,10 @@ import com.apurv.canineAi.models.shared.InfoItem;
 @AllArgsConstructor
 @Document(collection = "diseases")
 public class DiseaseEntity {
-	@Id
-	private String id;
+    @Id
+    private String id;
     private String name;
-    private DiseaseTags[] tags;
+    private List<DiseaseTags> tags;
     private String shortDescription;
     private String diseaseImageUrl;
     private String overview;

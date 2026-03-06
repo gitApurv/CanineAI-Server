@@ -1,6 +1,5 @@
 package com.apurv.canineAi.models.entity;
 
-import com.apurv.canineAi.models.enums.RiskLevel;
 import com.apurv.canineAi.models.enums.SeverityLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +26,6 @@ public class PredictionEntity {
     private SeverityLevel severityLevel;
     private Long symptomsDuration;
     private String predictedDiseaseId;
-    private Double confidenceScore;
-    private RiskLevel riskLevel;
     private Instant createdAt;
 
 }

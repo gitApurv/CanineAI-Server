@@ -1,7 +1,8 @@
 package com.apurv.canineAi.dto;
 
-import com.apurv.canineAi.models.enums.DiseaseTags;
 import java.util.List;
+
+import com.apurv.canineAi.models.enums.SeverityLevel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +13,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiseaseSummaryDto {
-    private String diseaseId;
-    private String title;
-    private String shortDescription;
-    private List<DiseaseTags> tags;
+public class PredictRequestDto {
+    private String dogId;
+    private List<String> symptoms;
+    private SeverityLevel severityLevel;
+    private Long symptomsDuration;
 }

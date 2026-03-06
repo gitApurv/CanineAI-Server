@@ -1,6 +1,6 @@
 package com.apurv.canineAi.dto;
 
-import com.apurv.canineAi.models.enums.DiseaseTags;
+import java.time.Instant;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -12,9 +12,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiseaseSummaryDto {
-    private String diseaseId;
-    private String title;
-    private String shortDescription;
-    private List<DiseaseTags> tags;
+public class DogPredictionDto {
+    private String predictionId;
+    private List<String> matchedSymptomsName;
+    private String predictedDiseaseName;
+    private Instant createdAt;
+
 }

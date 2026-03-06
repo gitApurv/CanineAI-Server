@@ -91,4 +91,8 @@ public class DogService {
 
         dogRepository.delete(dog);
     }
+
+    public Long getDogCountByOwnerId(String ownerId) {
+        return dogRepository.countByOwnerId(ownerId);
+    }
 }

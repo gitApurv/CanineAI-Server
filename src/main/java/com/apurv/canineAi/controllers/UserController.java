@@ -1,5 +1,6 @@
 package com.apurv.canineAi.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,20 +29,21 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDto>> getUserInfo(HttpServletRequest request) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         try {
             String userId = userIdAttr.toString();
             UserDto user = userService.getUserInfo(userId);
             if (user == null) {
-                return ResponseEntity.status(404).body(ApiResponse.error("User not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found"));
             }
             return ResponseEntity.ok(ApiResponse.success(user));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -50,7 +52,7 @@ public class UserController {
             @RequestBody UserUpdateRequestDto userRequest) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         try {
@@ -58,11 +60,12 @@ public class UserController {
             return ResponseEntity.ok(ApiResponse.success("User information updated successfully"));
         } catch (IllegalArgumentException ex) {
             if ("User not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(404).body(ApiResponse.error("User not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -71,7 +74,7 @@ public class UserController {
             HttpServletRequest request, @RequestBody PasswordUpdateRequestDto passwordUpdateRequest) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         try {
@@ -79,14 +82,16 @@ public class UserController {
             return ResponseEntity.ok(ApiResponse.success("Password updated successfully"));
         } catch (IllegalArgumentException ex) {
             if ("User not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(404).body(ApiResponse.error("User not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("User not found"));
             }
             if ("Current password is incorrect".equals(ex.getMessage())) {
-                return ResponseEntity.badRequest().body(ApiResponse.error("Current password is incorrect"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error("Current password is incorrect"));
             }
-            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 

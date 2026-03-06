@@ -10,4 +10,6 @@ import com.apurv.canineAi.models.entity.DogEntity;
 @Repository
 public interface DogRepository extends MongoRepository<DogEntity, String> {
 	List<DogEntity> findByOwnerId(String ownerId);
+
+	Long countByOwnerId(String ownerId);
 }

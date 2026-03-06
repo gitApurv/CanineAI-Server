@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class DogController {
             HttpServletRequest request) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         try {
@@ -44,7 +45,8 @@ public class DogController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -52,7 +54,7 @@ public class DogController {
     public ResponseEntity<ApiResponse<List<DogSummaryDto>>> getDogs(HttpServletRequest request) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         try {
@@ -62,7 +64,8 @@ public class DogController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -71,7 +74,7 @@ public class DogController {
             @PathVariable String dogId) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         String userId = userIdAttr.toString();
@@ -80,14 +83,15 @@ public class DogController {
             return ResponseEntity.ok(ApiResponse.success(dog));
         } catch (IllegalArgumentException ex) {
             if ("Dog not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(404).body(ApiResponse.error("Dog not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Dog not found"));
             }
             if ("Unauthorized access to dog".equals(ex.getMessage())) {
-                return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -96,7 +100,7 @@ public class DogController {
             @RequestBody DogRequestDto dogRequest) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         String userId = userIdAttr.toString();
@@ -105,14 +109,15 @@ public class DogController {
             return ResponseEntity.ok(ApiResponse.success("Dog updated successfully"));
         } catch (IllegalArgumentException ex) {
             if ("Dog not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(404).body(ApiResponse.error("Dog not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Dog not found"));
             }
             if ("Unauthorized access to dog".equals(ex.getMessage())) {
-                return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 
@@ -120,7 +125,7 @@ public class DogController {
     public ResponseEntity<ApiResponse<String>> deleteDog(HttpServletRequest request, @PathVariable String dogId) {
         Object userIdAttr = request.getAttribute("userId");
         if (userIdAttr == null) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Unauthorized"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
         }
 
         String userId = userIdAttr.toString();
@@ -129,14 +134,34 @@ public class DogController {
             return ResponseEntity.ok(ApiResponse.success("Dog deleted successfully"));
         } catch (IllegalArgumentException ex) {
             if ("Dog not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(404).body(ApiResponse.error("Dog not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Dog not found"));
             }
             if ("Unauthorized access to dog".equals(ex.getMessage())) {
-                return ResponseEntity.status(403).body(ApiResponse.error("Forbidden"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("Forbidden"));
             }
             return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(500).body(ApiResponse.error("Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
+        }
+    }
+
+    @GetMapping(ApiUrls.DOGS + "/count")
+    public ResponseEntity<ApiResponse<Long>> getDogCount(HttpServletRequest request) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
+        }
+
+        String userId = userIdAttr.toString();
+        try {
+            Long count = dogService.getDogCountByOwnerId(userId);
+            return ResponseEntity.ok(ApiResponse.success(count));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Internal server error"));
         }
     }
 }

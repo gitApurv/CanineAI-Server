@@ -24,8 +24,14 @@ public class SymptomService {
     public List<SymptomDto> getAllSymptoms() {
         List<SymptomEntity> symptoms = symptomRepository.findAll();
         return symptoms.stream()
-                .map(symptom -> new SymptomDto(symptom.getId(), symptom.getName(), symptom.getDescription()))
+                .map(symptom -> new SymptomDto(symptom.getName(), symptom.getDescription()))
                 .toList();
+    }
+
+    public SymptomDto getSymptomById(String symptomId) {
+        SymptomEntity symptom = symptomRepository.findById(symptomId)
+                .orElseThrow(() -> new RuntimeException("Symptom not found for id: " + symptomId));
+        return new SymptomDto(symptom.getName(), symptom.getDescription());
     }
 
     public List<SymptomDto> mapSymptomIdsToDtos(List<String> symptomIds) {
@@ -43,7 +49,7 @@ public class SymptomService {
                     if (symptom == null) {
                         throw new IllegalStateException("Missing symptom for id: " + id);
                     }
-                    return new SymptomDto(symptom.getId(), symptom.getName(), symptom.getDescription());
+                    return new SymptomDto(symptom.getName(), symptom.getDescription());
                 })
                 .toList();
     }

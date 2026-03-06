@@ -17,7 +17,7 @@ import com.apurv.canineAi.models.shared.InfoItem;
 public class DiseaseDto {
     private String id;
     private String name;
-    private DiseaseTags[] tags;
+    private List<DiseaseTags> tags;
     private String shortDescription;
     private String diseaseImageUrl;
     private String overview;

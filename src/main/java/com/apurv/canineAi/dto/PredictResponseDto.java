@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SymptomDto {
-    private String name;
-    private String description;
+public class PredictResponseDto {
+    private String predictionId;
 }

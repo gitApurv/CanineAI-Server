@@ -3,7 +3,6 @@ package com.apurv.canineAi.controllers;
 import com.apurv.canineAi.constants.ApiUrls;
 import com.apurv.canineAi.dto.ApiResponse;
 import com.apurv.canineAi.dto.SymptomDto;
-import com.apurv.canineAi.repositories.SymptomRepository;
 import com.apurv.canineAi.services.SymptomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
