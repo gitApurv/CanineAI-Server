@@ -21,12 +21,12 @@ import com.apurv.canineAi.utils.TokenHashUtil;
 
 @Service
 public class AuthService {
-    
+
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailUtil emailUtil;
     private final long passwordResetTokenExpirationMinutes;
-    
+
     @Autowired
     public AuthService(
             UserRepository userRepository,
@@ -45,16 +45,16 @@ public class AuthService {
         }
 
         UserEntity newUser = new UserEntity(
-                 null,
+                null,
                 userRegisterRequestDto.getName(),
                 userRegisterRequestDto.getEmail(),
-            PasswordHasherUtil.hash(userRegisterRequestDto.getPassword()),
+                PasswordHasherUtil.hash(userRegisterRequestDto.getPassword()),
                 userRegisterRequestDto.getProfilePictureUrl(),
                 Instant.now());
 
         UserEntity savedUser = userRepository.save(newUser);
 
-        emailUtil.sendWelcomeEmail(savedUser);
+        // emailUtil.sendWelcomeEmail(savedUser);
 
         return toResponseDto(savedUser);
     }
@@ -94,7 +94,7 @@ public class AuthService {
                 null,
                 user.getId(),
                 user.getEmail(),
-            tokenHash,
+                tokenHash,
                 expiresAt,
                 now));
 

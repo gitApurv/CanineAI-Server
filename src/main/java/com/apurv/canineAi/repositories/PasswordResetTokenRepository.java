@@ -10,6 +10,8 @@ import com.apurv.canineAi.models.entity.PasswordResetTokenEntity;
 @Repository
 public interface PasswordResetTokenRepository extends MongoRepository<PasswordResetTokenEntity, String> {
     void deleteByEmail(String email);
+
     Optional<PasswordResetTokenEntity> findByTokenHashAndEmail(String tokenHash, String email);
+
     void deleteByTokenHash(String tokenHash);
 }

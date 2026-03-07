@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document(collection = "symptoms")
 public class SymptomEntity {
-
     @Id
     private String id;
     private String name;

@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.REGISTER_USER)
-    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(
+    public ResponseEntity<ApiResponse<String>> registerUser(
             @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             UserResponseDto registeredUser = authService.registerUser(userRegisterRequestDto);
@@ -42,7 +42,7 @@ public class AuthController {
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(ApiResponse.success(registeredUser));
+                    .body(ApiResponse.success("User registered successfully"));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
@@ -52,7 +52,7 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.LOGIN)
-    public ResponseEntity<ApiResponse<UserResponseDto>> loginUser(
+    public ResponseEntity<ApiResponse<String>> loginUser(
             @RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
             UserResponseDto loggedInUser = authService.loginUser(userLoginRequestDto);
@@ -60,7 +60,7 @@ public class AuthController {
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(ApiResponse.success(loggedInUser));
+                    .body(ApiResponse.success("Login successful"));
         } catch (IllegalArgumentException ex) {
             if ("Email not found".equals(ex.getMessage())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));

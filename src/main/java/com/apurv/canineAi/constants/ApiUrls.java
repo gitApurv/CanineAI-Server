@@ -11,5 +11,4 @@ public final class ApiUrls {
     public static final String DOGS = "/api/dog";
     public static final String USER = "/api/user";
     public static final String PREDICT = "/api/predict";
-
 }

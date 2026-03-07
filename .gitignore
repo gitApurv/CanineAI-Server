@@ -37,3 +37,5 @@ application.properties
 
 src/main/java/com/apurv/canineAi/config/SymptomDataSeeder.java
 src/main/java/com/apurv/canineAi/config/DiseaseDataSeeder.java
+
+Dockerfile

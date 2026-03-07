@@ -44,7 +44,7 @@ public class PredictionService {
         SeverityLevel severityLevel = predictionRequest.getSeverityLevel();
         Long symptomsDuration = predictionRequest.getSymptomsDuration();
         PredictionEntity prediction = new PredictionEntity(null, userId, dogId, symptoms, severityLevel,
-                symptomsDuration, "69a5c1a0405c17dcd6cb3b81", Instant.now());
+                symptomsDuration, "69ac3928dd2165b1645815b2", Instant.now());
         PredictionEntity savedPrediction = predictionRepository.save(prediction);
         return new PredictResponseDto(savedPrediction.getId());
     }

@@ -16,7 +16,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Document(collection = "password_reset_tokens")
 public class PasswordResetTokenEntity {
-
     @Id
     private String id;
     private String userId;

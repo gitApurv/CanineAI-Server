@@ -69,7 +69,8 @@ public class JwtTokenUtil {
 
     private static Properties loadApplicationProperties() {
         Properties properties = new Properties();
-        try (InputStream inputStream = JwtTokenUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream inputStream = JwtTokenUtil.class.getClassLoader()
+                .getResourceAsStream("application.properties")) {
             if (inputStream != null) {
                 properties.load(inputStream);
             }
