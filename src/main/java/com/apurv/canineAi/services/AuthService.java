@@ -73,7 +73,7 @@ public class AuthService {
         return toResponseDto(user);
     }
 
-    public void forgotPassword(String email) {
+    public void forgotPassword(String email, String requestOrigin, String requestReferer) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email is required");
         }
@@ -98,7 +98,7 @@ public class AuthService {
                 expiresAt,
                 now));
 
-        emailUtil.sendPasswordResetEmail(user, token);
+        emailUtil.sendPasswordResetEmail(user, token, requestOrigin, requestReferer);
     }
 
     public void resetPassword(String token, String email, String newPassword) {

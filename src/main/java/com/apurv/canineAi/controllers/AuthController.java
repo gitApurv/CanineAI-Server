@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
 import com.apurv.canineAi.constants.ApiUrls;
 import com.apurv.canineAi.dto.ApiResponse;
 import com.apurv.canineAi.dto.ForgotPasswordRequestDto;
@@ -75,9 +77,13 @@ public class AuthController {
 
     @PostMapping(ApiUrls.FORGOT_PASSWORD)
     public ResponseEntity<ApiResponse<String>> forgotPassword(
-            @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
+            @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto,
+            HttpServletRequest request) {
         try {
-            authService.forgotPassword(forgotPasswordRequestDto.getEmail());
+            authService.forgotPassword(
+                    forgotPasswordRequestDto.getEmail(),
+                    request.getHeader(HttpHeaders.ORIGIN),
+                    request.getHeader(HttpHeaders.REFERER));
             return ResponseEntity.ok(ApiResponse.success("Password reset email sent successfully"));
         } catch (IllegalArgumentException ex) {
             if ("Email not found".equals(ex.getMessage())) {
