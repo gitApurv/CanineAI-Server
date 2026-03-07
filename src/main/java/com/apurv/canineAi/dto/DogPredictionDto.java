@@ -17,5 +17,4 @@ public class DogPredictionDto {
     private List<String> matchedSymptomsName;
     private String predictedDiseaseName;
     private Instant createdAt;
-
 }

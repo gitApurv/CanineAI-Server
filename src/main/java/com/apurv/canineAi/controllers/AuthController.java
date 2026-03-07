@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import com.apurv.canineAi.constants.ApiUrls;
 import com.apurv.canineAi.dto.ApiResponse;
-import com.apurv.canineAi.dto.ForgotPasswordRequestDto;
-import com.apurv.canineAi.dto.ResetPasswordRequestDto;
 import com.apurv.canineAi.dto.UserLoginRequestDto;
 import com.apurv.canineAi.dto.UserRegisterRequestDto;
 import com.apurv.canineAi.dto.UserResponseDto;
@@ -34,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.REGISTER_USER)
-    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(
+    public ResponseEntity<ApiResponse<String>> registerUser(
             @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             UserResponseDto registeredUser = authService.registerUser(userRegisterRequestDto);
@@ -42,7 +39,7 @@ public class AuthController {
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(ApiResponse.success(registeredUser));
+                    .body(ApiResponse.success("User registered successfully"));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
@@ -52,7 +49,7 @@ public class AuthController {
     }
 
     @PostMapping(ApiUrls.LOGIN)
-    public ResponseEntity<ApiResponse<UserResponseDto>> loginUser(
+    public ResponseEntity<ApiResponse<String>> loginUser(
             @RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
             UserResponseDto loggedInUser = authService.loginUser(userLoginRequestDto);
@@ -60,7 +57,7 @@ public class AuthController {
             ResponseCookie authCookie = AuthCookieUtil.buildAuthCookie(token);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, authCookie.toString())
-                    .body(ApiResponse.success(loggedInUser));
+                    .body(ApiResponse.success("User logged in successfully"));
         } catch (IllegalArgumentException ex) {
             if ("Email not found".equals(ex.getMessage())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
@@ -69,53 +66,6 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid password"));
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error"));
-        }
-    }
-
-    @PostMapping(ApiUrls.FORGOT_PASSWORD)
-    public ResponseEntity<ApiResponse<String>> forgotPassword(
-            @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto,
-            HttpServletRequest request) {
-        try {
-            authService.forgotPassword(
-                    forgotPasswordRequestDto.getEmail(),
-                    request.getHeader(HttpHeaders.ORIGIN),
-                    request.getHeader(HttpHeaders.REFERER));
-            return ResponseEntity.ok(ApiResponse.success("Password reset email sent successfully"));
-        } catch (IllegalArgumentException ex) {
-            if ("Email not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
-            }
-            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error"));
-        }
-    }
-
-    @PostMapping(ApiUrls.RESET_PASSWORD)
-    public ResponseEntity<ApiResponse<String>> resetPassword(
-            @RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
-        try {
-            authService.resetPassword(
-                    resetPasswordRequestDto.getToken(),
-                    resetPasswordRequestDto.getEmail(),
-                    resetPasswordRequestDto.getPassword());
-            return ResponseEntity.ok(ApiResponse.success("Password reset successfully"));
-        } catch (IllegalArgumentException ex) {
-            if ("Invalid token".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid token"));
-            }
-            if ("Token expired".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.GONE).body(ApiResponse.error("Token expired"));
-            }
-            if ("Email not found".equals(ex.getMessage())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Email not found"));
-            }
-            return ResponseEntity.badRequest().body(ApiResponse.error(ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Internal server error"));
