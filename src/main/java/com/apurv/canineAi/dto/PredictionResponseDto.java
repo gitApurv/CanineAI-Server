@@ -21,6 +21,8 @@ public class PredictionResponseDto {
     private String predictedDiseaseName;
     private String predictedDiseaseOverview;
     private List<DiseaseTags> predictedDiseaseTags;
+    private Double probability;
+    private String confidence;
     private List<InfoItem> predictedDiseasePreventionTips;
     private List<SymptomDto> matchedSymptoms;
     private Instant createdAt;

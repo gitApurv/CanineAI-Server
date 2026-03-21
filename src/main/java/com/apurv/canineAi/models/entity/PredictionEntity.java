@@ -26,6 +26,8 @@ public class PredictionEntity {
     private SeverityLevel severityLevel;
     private Long symptomsDuration;
     private String predictedDiseaseId;
+    private Double probability;
+    private String confidence;
     private Instant createdAt;
 
 }
