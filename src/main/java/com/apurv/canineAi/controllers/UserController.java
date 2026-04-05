@@ -25,6 +25,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping(ApiUrls.USER + "/logged-in")
+    public ResponseEntity<ApiResponse<Boolean>> ping(HttpServletRequest request) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Unauthorized"));
+        }
+        return ResponseEntity.ok(ApiResponse.success(true));
+    }
+
     @GetMapping(ApiUrls.USER)
     public ResponseEntity<ApiResponse<UserDto>> getUserInfo(HttpServletRequest request) {
         Object userIdAttr = request.getAttribute("userId");
