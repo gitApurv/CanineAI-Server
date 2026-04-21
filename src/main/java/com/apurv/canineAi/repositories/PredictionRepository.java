@@ -13,6 +13,8 @@ public interface PredictionRepository extends MongoRepository<PredictionEntity, 
 
     List<PredictionEntity> findByDogId(String dogId);
 
+    void deleteByDogId(String dogId);
+
     List<PredictionEntity> findTop3ByUserIdOrderByCreatedAtDesc(String userId);
 
     Long countByUserId(String userId);
