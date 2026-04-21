@@ -10,14 +10,17 @@ import com.apurv.canineAi.dto.DogRequestDto;
 import com.apurv.canineAi.dto.DogSummaryDto;
 import com.apurv.canineAi.models.entity.DogEntity;
 import com.apurv.canineAi.repositories.DogRepository;
+import com.apurv.canineAi.repositories.PredictionRepository;
 
 @Service
 public class DogService {
 
     private final DogRepository dogRepository;
+    private final PredictionRepository predictionRepository;
 
-    public DogService(DogRepository dogRepository) {
+    public DogService(DogRepository dogRepository, PredictionRepository predictionRepository) {
         this.dogRepository = dogRepository;
+        this.predictionRepository = predictionRepository;
     }
 
     public void addDog(DogRequestDto dogRequest, String userId) {
@@ -89,6 +92,7 @@ public class DogService {
             throw new IllegalArgumentException("Unauthorized access to dog");
         }
 
+        predictionRepository.deleteByDogId(dogId);
         dogRepository.delete(dog);
     }
 
